@@ -1,0 +1,19 @@
+meta {
+  name: signin
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5000/auth/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "emailOrUsername":"boy1@email.com",
+    "password":"password",
+    "username":"boy1"
+  }
+}
