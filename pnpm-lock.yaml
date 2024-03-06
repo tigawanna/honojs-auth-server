@@ -8,9 +8,6 @@ dependencies:
   '@hono/node-server':
     specifier: ^1.8.1
     version: 1.8.1
-  '@hono/swagger-ui':
-    specifier: ^0.2.1
-    version: 0.2.1(hono@4.0.7)
   '@hono/zod-openapi':
     specifier: ^0.9.6
     version: 0.9.6(hono@4.0.7)(zod@3.22.4)
@@ -40,6 +37,9 @@ dependencies:
     version: 3.22.4
 
 devDependencies:
+  '@hono/swagger-ui':
+    specifier: ^0.2.1
+    version: 0.2.1(hono@4.0.7)
   '@types/bcrypt':
     specifier: ^5.0.2
     version: 5.0.2
@@ -503,7 +503,7 @@ packages:
       hono: '*'
     dependencies:
       hono: 4.0.7
-    dev: false
+    dev: true
 
   /@hono/zod-openapi@0.9.6(hono@4.0.7)(zod@3.22.4):
     resolution: {integrity: sha512-MLF8xpd4fEwbEaylFqAt1qci4wOTXu3oq3BKb01trccapYfodP50VCO0YDNBQTyMT/Iapq6GMO4+RAIFBgG5WQ==}
@@ -1279,7 +1279,6 @@ packages:
   /hono@4.0.7:
     resolution: {integrity: sha512-1fhi9MUzMIXWqPWA7OGPTpzjQupT78rf+U6N+2vxwy7U76jUX0dmkUtp572gR+dbGR1YugLYvyg/JrgPOSoutw==}
     engines: {node: '>=16.0.0'}
-    dev: false
 
   /https-proxy-agent@5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}

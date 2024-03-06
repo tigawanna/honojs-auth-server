@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.8.1",
-    "@hono/swagger-ui": "^0.2.1",
     "@hono/zod-openapi": "^0.9.6",
     "@libsql/client": "^0.5.2",
     "bcrypt": "^5.1.1",
@@ -20,6 +19,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@hono/swagger-ui": "^0.2.1",
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.9",
     "@types/node": "^20.11.20",
