@@ -18,7 +18,7 @@ const ErrorSchema = z.object({
   }),
 });
 
-export const rootRoute = createRoute({
+export const rootGetRoute = createRoute({
   method: "get",
   path: "/",
   responses: {

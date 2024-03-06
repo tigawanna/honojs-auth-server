@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 import dotenv from "dotenv";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { rootRoute } from "./routes/root/index.root";
+import { rootGetRoute } from "./routes/root/index.root";
 import { authRoute } from "./routes/auth";
 
 const app = new OpenAPIHono({});
@@ -13,18 +13,18 @@ app.use(async (_, next) => {
   await next();
 });
 
-app.openapi(rootRoute, (c) => {
+app.openapi(rootGetRoute, (c) => {
   return c.json({
-    message: "Hello Hono! index route",
+    message: "Welecome to honojs-auth-server",
   });
 });
-app.route("/auth",authRoute);
+app.route("/auth", authRoute);
 
 app.get(
   "/ui",
   swaggerUI({
     url: "/doc",
-  })
+  }),
 );
 
 app.doc("/doc", {
