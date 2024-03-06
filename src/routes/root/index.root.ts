@@ -11,7 +11,7 @@ export const rootRoute = createRoute({
           schema: RootRouteSchema,
         },
       },
-      description: "Retrieve the user",
+      description: "Retrieve the root route",
     },
   },
 });
