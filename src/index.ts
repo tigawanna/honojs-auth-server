@@ -4,6 +4,7 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { rootGetRoute } from "./routes/root/index.root";
 import { authRoute } from "./routes/auth";
+import { usersRoute } from "./routes/users";
 
 const app = new OpenAPIHono({});
 
@@ -19,6 +20,7 @@ app.openapi(rootGetRoute, (c) => {
   });
 });
 app.route("/auth", authRoute);
+app.route("/users", usersRoute);
 
 app.get(
   "/ui",

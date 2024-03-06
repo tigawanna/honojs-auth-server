@@ -10,7 +10,7 @@ export const AuthSigninRouteSchema = z
   .openapi("Signin");
 
 export const  authGetSigninRoute = createRoute({
-  method: "get",
+  method: "post",
   path: "/signin",
   responses: {
     200: {
