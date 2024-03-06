@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { text,int, sqliteTable } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { z } from "@hono/zod-openapi";
 
 export const users_table = sqliteTable("users", {
   id: text("id").notNull().primaryKey(),
