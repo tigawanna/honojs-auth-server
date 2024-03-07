@@ -1,17 +1,39 @@
+import { selectUserSchema } from "@/routes/users/user.table";
 import { createRoute } from "@hono/zod-openapi";
 import { z } from "@hono/zod-openapi";
 
+export const AuthSigninRequestBodySchema = z.object({
+  content: z.object({
+    emailOrUsername: z.string().min(1),
+    password: z.string().min(1),
+  }),
+});
+
 export const AuthSigninRouteSchema = z
   .object({
-    message: z.string().openapi({
-      example: "signin route",
+    accessToken: z.string().openapi({
+      example: "gdhtehshssgetfakkkmd",
+      description: "access token , to be used on subsequent requests",
     }),
+    user: selectUserSchema,
   })
-  .openapi("Signin");
+  .openapi({
+    description:
+      "Signin Route , returns user and access token and sets a refresh token cookie with the key , kjz",
+  });
 
-export const  authGetSigninRoute = createRoute({
+export const authGetSigninRoute = createRoute({
   method: "post",
   path: "/signin",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: AuthSigninRequestBodySchema,
+        },
+      },
+    },
+  },
   responses: {
     200: {
       content: {
@@ -19,6 +41,16 @@ export const  authGetSigninRoute = createRoute({
           schema: AuthSigninRouteSchema,
         },
       },
+      headers: {
+        "Set-Cookie": {
+          schema: {
+            type: "string",
+            nullable: true,
+          },
+          description: "set a refresh token cookie with the key , kjz",
+        },
+      },
+
       description: "Authenticates the user",
     },
   },
