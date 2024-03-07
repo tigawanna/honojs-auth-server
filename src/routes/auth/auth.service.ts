@@ -23,11 +23,7 @@ export async function signupUser(user: Omit<UserInsertType, "id">) {
       throw new Error("Username already exists");
     }
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    return await createUser({
-      ...user,
-      id: crypto.randomUUID(),
-      password: hashedPassword,
-    });
+    return await createUser({ ...user, id: crypto.randomUUID(), password: hashedPassword });
   } catch (error) {
     // Handle errors appropriately
 

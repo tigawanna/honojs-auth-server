@@ -8,6 +8,13 @@ export const AuthSigninRequestBodySchema = z.object({
     password: z.string().min(1),
   }),
 });
+export const AuthSignupRequestBodySchema = z.object({
+  content: z.object({
+    email: z.string().email(),
+    username: z.string().min(1),
+    password: z.string().min(1),
+  }),
+});
 
 export const AuthSigninRouteSchema = z
   .object({
@@ -30,6 +37,39 @@ export const authGetSigninRoute = createRoute({
       content: {
         "application/json": {
           schema: AuthSigninRequestBodySchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: AuthSigninRouteSchema,
+        },
+      },
+      headers: {
+        "Set-Cookie": {
+          schema: {
+            type: "string",
+            nullable: true,
+          },
+          description: "set a refresh token cookie with the key , kjz",
+        },
+      },
+
+      description: "Authenticates the user",
+    },
+  },
+});
+export const authGetSignupRoute = createRoute({
+  method: "post",
+  path: "/signup",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: AuthSignupRequestBodySchema,
         },
       },
     },

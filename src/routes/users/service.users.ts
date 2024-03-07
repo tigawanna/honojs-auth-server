@@ -71,7 +71,7 @@ export async function createUser(user: (typeof users_table)["$inferInsert"]) {
         createdAt: users_table.createdAt,
         updatedAt: users_table.updatedAt,
       });
-    return createdUser;
+    return createdUser[0]
   } catch (error) {
     throw error;
   }
