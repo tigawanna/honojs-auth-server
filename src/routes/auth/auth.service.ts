@@ -62,7 +62,7 @@ export async function readRefreshToken(c: Context<Env, "/", BlankInput>) {
   const { REFRESH_TOKEN_SECRET } = enviromentVariables(c);
   const refresh_token = getCookie(c, "kjz");
   if (!refresh_token) {
-    return c.redirect("/auth/signin");
+    return c.json({ error: "Unauthorized", message: "Refresh token not found" });
   }
   const refresh_token_payload = await verify(refresh_token, REFRESH_TOKEN_SECRET);
   return refresh_token_payload;
