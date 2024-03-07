@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { selectUserSchema } from "../../db-schema";
+import { selectUserSchema } from "../../user.table";
 
 const GetUsersRouteSchema = z.array(selectUserSchema).openapi("all users");
 const GetUsersRouteQueryParamsSchema = z.object({

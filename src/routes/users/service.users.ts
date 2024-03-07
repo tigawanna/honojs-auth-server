@@ -1,5 +1,5 @@
 import { db } from "@/db/client";
-import { users_table } from "./db-schema";
+import { users_table } from "./user.table";
 import { count, eq, or } from "drizzle-orm";
 
 
