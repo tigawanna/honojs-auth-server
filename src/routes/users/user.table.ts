@@ -20,6 +20,6 @@ const insertUserSchema = createInsertSchema(users_table, {
 });
 
 // Schema for selecting a user - can be used to validate API responses
-const selectUserSchema = createSelectSchema(users_table, {}).omit({ password: true });
+const selectUserSchema = createSelectSchema(users_table, {}).omit({ password: true,tokenVersion:true });
 
 export { insertUserSchema, selectUserSchema };

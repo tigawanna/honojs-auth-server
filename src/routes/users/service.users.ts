@@ -2,11 +2,12 @@ import { db } from "@/db/client";
 import { users_table } from "./user.table";
 import { count, eq, or } from "drizzle-orm";
 
-
-export async function getPaginatedUsers(pageNumber = 1, pageSize = 10, count_rows = true) {
+export async function getUserList(page:number,perPage:number) {
+  console.log(page, perPage);
   try {
-    const offset = (pageNumber - 1) * pageSize;
-    const total_users = count_rows && (await db.select({ value: count() }).from(users_table));
+    const offset = (page - 1) * perPage;
+    const total_users = await db.select({ value: count() }).from(users_table);
+    const totalItems = total_users[0].value;
     const users = await db
       .select({
         id: users_table.id,
@@ -16,16 +17,15 @@ export async function getPaginatedUsers(pageNumber = 1, pageSize = 10, count_row
         updatedAt: users_table.updatedAt,
       })
       .from(users_table)
-      .limit(pageSize) // Fetch only the specified number of users
+      .limit(perPage) // Fetch only the specified number of users
       .offset(offset); // Skip the initial rows based on offset
 
     return {
-      data: users,
-      pageinfo: {
-        total: users.length,
-        totalPages: total_users ? Math.ceil(total_users[0].value / pageSize) : undefined,
-        currentPage: pageNumber,
-      },
+      items: users,
+      page,
+      perPage,
+      totalPages: Math.ceil(total_users[0].value / perPage),
+      totalItems,
     };
   } catch (error) {
     // Handle errors appropriately
@@ -35,15 +35,13 @@ export async function getPaginatedUsers(pageNumber = 1, pageSize = 10, count_row
 
 export async function findUserByID(id: string) {
   try {
-    const user = await db
-      .select()
-      .from(users_table)
-      .where(eq(users_table.id, id));
+    const user = await db.select().from(users_table).where(eq(users_table.id, id));
     return user;
   } catch (error) {
     throw error;
   }
 }
+
 export async function findUserByEmailOrUsername(emailOrUsername: string) {
   try {
     const user = await db
@@ -55,7 +53,6 @@ export async function findUserByEmailOrUsername(emailOrUsername: string) {
     throw error;
   }
 }
-
 
 export async function createUser(user: (typeof users_table)["$inferInsert"]) {
   try {

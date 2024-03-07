@@ -26,7 +26,7 @@ app.get(
   "/ui",
   swaggerUI({
     url: "/doc",
-  }),
+  })
 );
 
 app.doc("/doc", {

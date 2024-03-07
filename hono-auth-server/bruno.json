@@ -1,0 +1,5 @@
+{
+  "version": "1",
+  "name": "hono-auth-server",
+  "type": "collection"
+}
