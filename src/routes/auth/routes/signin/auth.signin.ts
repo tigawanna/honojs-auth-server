@@ -31,8 +31,7 @@ export const AuthSignupRequestBodySchema = z.object({
   }),
 });
 
-export const AuthSigninRouteSchema = z
-  .object({
+export const AuthSigninRouteSchema = z.object({
     accessToken: z.string().openapi({
       example: "gdhtehshssgetfakkkmd",
       description: "access token , to be used on subsequent requests",
