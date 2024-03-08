@@ -21,5 +21,5 @@ export const authGetIndexRoute = createRoute({
       },
       description: "Retrieve the user",
     },
-  },
+  }
 });

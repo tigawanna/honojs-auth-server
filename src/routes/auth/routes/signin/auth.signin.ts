@@ -2,6 +2,21 @@ import { selectUserSchema } from "@/routes/users/user.table";
 import { createRoute } from "@hono/zod-openapi";
 import { z } from "@hono/zod-openapi";
 
+
+
+export const AuthErrorSchema = z.object({
+  code: z.number().openapi({
+    example: 400,
+  }),
+  message: z.string().openapi({
+    example: "Bad Request",
+  }),
+  errors:z.object({
+    field: z.string(),
+    message: z.string(),
+  }).optional()
+});
+
 export const AuthSigninRequestBodySchema = z.object({
   content: z.object({
     emailOrUsername: z.string().min(1),
@@ -60,6 +75,14 @@ export const authGetSigninRoute = createRoute({
 
       description: "Authenticates the user",
     },
+    400: {
+      content: {
+        "application/json": {
+          schema: AuthErrorSchema,
+        },
+      },
+      description: "Bad request",
+    },
   },
 });
 export const authGetSignupRoute = createRoute({
@@ -92,6 +115,14 @@ export const authGetSignupRoute = createRoute({
       },
 
       description: "Authenticates the user",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: AuthErrorSchema,
+        },
+      },
+      description: "Bad request",
     },
   },
 });

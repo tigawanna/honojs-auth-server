@@ -3,8 +3,7 @@ import { users_table } from "./user.table";
 import { count, eq, or } from "drizzle-orm";
 
 export async function getUserList(page:number,perPage:number) {
-  console.log(page, perPage);
-  try {
+try {
     const offset = (page - 1) * perPage;
     const total_users = await db.select({ value: count() }).from(users_table);
     const totalItems = total_users[0].value;
