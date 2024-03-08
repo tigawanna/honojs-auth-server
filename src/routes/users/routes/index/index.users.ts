@@ -1,6 +1,21 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { selectUserSchema } from "../../user.table";
 
+export const UsersErrorSchema = z.object({
+  code: z.number().openapi({
+    example: 400,
+  }),
+  message: z.string().openapi({
+    example: "Bad Request",
+  }),
+  errors: z
+    .object({
+      field: z.string(),
+      message: z.string(),
+    })
+    .optional(),
+});
+
 const GetUsersRouteSchema = z.object({
   page: z.number().openapi({
     example: 1,
@@ -47,18 +62,13 @@ export const usersGetIndexRoute = createRoute({
       },
       description: "Retrieve the users",
     },
-    404: {
-      description: "Not found",
+    400: {
       content: {
         "application/json": {
-          schema: z.object({
-            error: z.string(),
-            message: z.string(),
-            stack: z.string().optional(),
-            cause: z.string().optional(),
-          }),
+          schema: UsersErrorSchema,
         },
       },
+      description: "Bad request",
     },
   },
 });
@@ -69,7 +79,7 @@ export const usersGetOneIndexRoute = createRoute({
   method: "get",
   path: ":id",
   request: {
-    params: z.object({ id: z.string() })
+    params: z.object({ id: z.string() }),
   },
   responses: {
     200: {
@@ -80,18 +90,13 @@ export const usersGetOneIndexRoute = createRoute({
       },
       description: "Retrieve one user",
     },
-    404: {
-      description: "Not found",
+    400: {
       content: {
         "application/json": {
-          schema: z.object({
-            error: z.string(),
-            message: z.string(),
-            stack: z.string().optional(),
-            cause: z.string().optional(),
-          }),
+          schema: UsersErrorSchema,
         },
       },
+      description: "Bad request",
     },
   },
 });
