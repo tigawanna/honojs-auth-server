@@ -39,14 +39,7 @@ const access_token = await createAccessToken(c, { id: "716cbe18-74d8-4f41-ba9a-d
     access_token,
   });
 });
-app.get("/check/:id", async (c) => {
-  const jwt = c.req.param("id");
-const access_token = await verifyAccessToken(c, jwt);
-  return c.json({
-    message: "Hello Hono! auth route",
-    access_token,
-  });
-});
+// 
 
 // signin user
 app.openapi(authPostSigninRoute, async (c) => {
@@ -140,6 +133,7 @@ app.openapi(authPostCurrentUserRoute, async (c) => {
   }
 });
 
+// refresh access token if refresh token exists
 app.openapi(authPostRefreshTokenRoute, async (c) => {
   try {
     const { kjz } = c.req.valid("cookie");
