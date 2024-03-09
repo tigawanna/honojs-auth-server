@@ -5,9 +5,10 @@ import { verify } from "hono/jwt";
 import { BlankInput } from "hono/types";
 import { deleteCookie } from "hono/cookie";
 import { users_table } from "../../users/user.table";
-import { createUser, findUserByEmailOrUsername, findUserByID } from "../../users/service.users";
+import { createUser, findUserByEmailOrUsername} from "../../users/service.users";
 import { z } from "@hono/zod-openapi";
 import { AuthSigninRequestBodySchema } from "../routes/signin/auth.signin";
+
 
 type UserInsertType = (typeof users_table)["$inferInsert"];
 type SigninBody = z.infer<typeof AuthSigninRequestBodySchema>["content"];
@@ -48,7 +49,22 @@ export async function signinUser({ emailOrUsername, password: pass }: SigninBody
     throw err;
   }
 }
+export async function getCurrentUser({ emailOrUsername, password: pass }: SigninBody) {
+  try {
+    const user = await findUserByEmailOrUsername(emailOrUsername);
+    if (!user?.[0]?.id) {
+      throw new Error("User not found");
+    }
+    const isPasswordValid = await bcrypt.compare(pass, user?.[0]?.password);
+    if (!isPasswordValid) {
+      throw new Error("Invalid password");
+    }
 
-export async function signoutUser(c: Context<Env, "/", BlankInput>) {
-  deleteCookie(c, "kjz");
+    const { password, tokenVersion, ...rest } = user?.[0];
+    return rest;
+  } catch (err: any) {
+    throw err;
+  }
 }
+
+

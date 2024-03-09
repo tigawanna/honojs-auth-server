@@ -19,6 +19,10 @@ const app = new OpenAPIHono({
   },
 });
 
+app.get("/access", async (c) => {
+  
+})
+
 app.openapi(usersGetIndexRoute, async (c) => {
   try {
     const { page, perPage } = c.req.valid("query");

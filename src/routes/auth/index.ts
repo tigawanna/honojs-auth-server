@@ -6,13 +6,16 @@ import {
   authPostSigninRoute,
   authPostSignupRoute,
 } from "./routes/signin/auth.signin";
-import { signinUser, signupUser } from "./services/user.service";
+import { signinUser, signupUser } from "./services/auth-user.service";
 import { parseZodError } from "@/utils/zodErrorParser";
 import { findUserByID } from "../users/service.users";
-
-import { verify } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { enviromentVariables } from "@/lib/env";
-import { createAccessToken, createRefreshToken, verifyAccessToken } from "./services/auth.tokens";
+import {
+  createAccessToken,
+  generateUserAuthTokens,
+  verifyAccessToken,
+} from "./services/auth-tokens.service";
 
 const app = new OpenAPIHono({
   // @ts-expect-error
@@ -29,9 +32,19 @@ const app = new OpenAPIHono({
     }
   },
 });
-app.openapi(authGetIndexRoute, (c) => {
+app.openapi(authGetIndexRoute, async (c) => {
+const access_token = await createAccessToken(c, { id: "716cbe18-74d8-4f41-ba9a-dc5cd8b9b5de" });
   return c.json({
     message: "Hello Hono! auth route",
+    access_token,
+  });
+});
+app.get("/check/:id", async (c) => {
+  const jwt = c.req.param("id");
+const access_token = await verifyAccessToken(c, jwt);
+  return c.json({
+    message: "Hello Hono! auth route",
+    access_token,
   });
 });
 
@@ -43,8 +56,7 @@ app.openapi(authPostSigninRoute, async (c) => {
     } = c.req.valid("json");
     const user = await signinUser({ emailOrUsername, password });
     const user_payload = { id: user.id };
-    const accessToken = await createAccessToken(c, user_payload);
-    await createRefreshToken(c, user_payload);
+    const { accessToken } = await generateUserAuthTokens(c, user_payload);
     return c.json({
       user,
       accessToken,
@@ -68,8 +80,7 @@ app.openapi(authPostSignupRoute, async (c) => {
     } = c.req.valid("json");
     const user = await signupUser({ email, password, username });
     const user_payload = { id: user.id };
-    const accessToken = await createAccessToken(c, user_payload);
-    await createRefreshToken(c, user_payload);
+    const { accessToken } = await generateUserAuthTokens(c, user_payload);
     return c.json({
       user,
       accessToken,
@@ -91,7 +102,6 @@ app.openapi(authPostCurrentUserRoute, async (c) => {
     const {
       content: { accessToken },
     } = c.req.valid("json");
-
     try {
       const payload = await verifyAccessToken(c, accessToken);
       const foundUser = await findUserByID(payload.id);
@@ -106,6 +116,7 @@ app.openapi(authPostCurrentUserRoute, async (c) => {
         if (!kjz) {
           throw new Error("fresh login required");
         }
+        console.log(" ============ kjz ============== ", kjz);
         const payload = await verify(kjz, enviromentVariables(c).REFRESH_TOKEN_SECRET);
         const accessToken = await createAccessToken(c, payload);
         console.log("===== new access token ==== ", accessToken);

@@ -4,8 +4,16 @@ meta {
   seq: 3
 }
 
-get {
+post {
   url: http://localhost:5000/auth/current-user
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "content":{
+      "accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxNmNiZTE4LTc0ZDgtNGY0MS1iYTlhLWRjNWNkOGI5YjVkZSJ9.1XiPR0sCGDhUJFhaKjPNIlcvYsfp2NHjFGJxtX_Ix"
+    }
+  }
 }
