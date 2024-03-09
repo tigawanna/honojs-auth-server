@@ -6,18 +6,13 @@ import {
   authPostSigninRoute,
   authPostSignupRoute,
 } from "./routes/signin/auth.signin";
-import {
-  createAccessToken,
-  createRefreshToken,
-  signinUser,
-  signupUser,
-  verifyAccessToken,
-} from "./auth.service";
+import { signinUser, signupUser } from "./services/user.service";
 import { parseZodError } from "@/utils/zodErrorParser";
 import { findUserByID } from "../users/service.users";
-import { json } from "stream/consumers";
+
 import { verify } from "hono/jwt";
 import { enviromentVariables } from "@/lib/env";
+import { createAccessToken, createRefreshToken, verifyAccessToken } from "./services/auth.tokens";
 
 const app = new OpenAPIHono({
   // @ts-expect-error
@@ -93,8 +88,11 @@ app.openapi(authPostSignupRoute, async (c) => {
 // get current user based on access token
 app.openapi(authPostCurrentUserRoute, async (c) => {
   try {
-    const {content: { accessToken }} = c.req.valid("json");
-  try {
+    const {
+      content: { accessToken },
+    } = c.req.valid("json");
+
+    try {
       const payload = await verifyAccessToken(c, accessToken);
       const foundUser = await findUserByID(payload.id);
       const { password, tokenVersion, ...user } = foundUser?.[0];
@@ -130,6 +128,7 @@ app.openapi(authPostCurrentUserRoute, async (c) => {
     );
   }
 });
+
 app.openapi(authPostRefreshTokenRoute, async (c) => {
   try {
     const { kjz } = c.req.valid("cookie");
