@@ -1,12 +1,27 @@
 import { serve } from "@hono/node-server";
 import dotenv from "dotenv";
 import { swaggerUI } from "@hono/swagger-ui";
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { rootGetRoute } from "./routes/root/index.root";
 import { authRoute } from "./routes/auth";
 import { usersRoute } from "./routes/users";
+import { parseZodError } from "./utils/zodErrorParser";
 
-const app = new OpenAPIHono({});
+const app = new OpenAPIHono({
+  // @ts-expect-error
+  defaultHook: (result, c) => {
+    if (!result.success && result.error && result.error instanceof z.ZodError) {
+      return c.json(
+        {
+          message: "Validation error",
+          code: 400,
+          errors: parseZodError(result.error),
+        },
+        400
+      );
+    }
+  },
+});
 
 // load .env variables
 app.use(async (_, next) => {
