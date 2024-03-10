@@ -3,7 +3,7 @@ import { AuthErrorSchema, AuthSignedinUserSchema } from "../shared/schema";
 
 export const authPostRefreshTokenRoute = createRoute({
   method: "post",
-  path: "/refresh-token",
+  path: "/",
   request: {
     cookies: z.object({
       kjz: z.string(),

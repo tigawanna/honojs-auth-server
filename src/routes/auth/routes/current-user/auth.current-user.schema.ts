@@ -5,7 +5,7 @@ import { AuthErrorSchema, AuthSignedinUserSchema } from "../shared/schema";
 // maps to auth/current-user
 export const authPostCurrentUserRoute = createRoute({
   method: "post",
-  path: "/current-user",
+  path: "/",
   request: {
     body: {
       content: {
