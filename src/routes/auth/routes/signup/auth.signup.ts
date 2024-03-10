@@ -1,17 +1,18 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { authPostSignupRoute } from "./auth.signup.schema";
 import { generateUserAuthTokens } from "../../services/auth-tokens.service";
-import { signinUser } from "../../services/auth-user.service";
-import { authPostSigninRoute } from "./auth.signin.schema";
+import { signupUser } from "../../services/auth-user.service";
 
-//  auth/signin route
+//  auth/signup route
 const app = new OpenAPIHono();
-// signin user
-app.openapi(authPostSigninRoute, async (c) => {
+
+// signup user
+app.openapi(authPostSignupRoute, async (c) => {
   try {
     const {
-      content: { emailOrUsername, password },
+      content: { email, password, username },
     } = c.req.valid("json");
-    const user = await signinUser({ emailOrUsername, password });
+    const user = await signupUser({ email, password, username });
     const user_payload = { id: user.id };
     const { accessToken } = await generateUserAuthTokens(c, user_payload);
     return c.json({
@@ -29,4 +30,4 @@ app.openapi(authPostSigninRoute, async (c) => {
   }
 });
 
-export { app as authSigninRoute };
+export { app as authSignupRoute };

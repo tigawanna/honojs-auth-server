@@ -2,6 +2,8 @@
   "name": "honojs-auth",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "test": "vitest --run",
+    "test:ui": "vitest --ui",
     "apply": "tsx src/db/apply.ts",
     "migrate": "npx drizzle-kit generate:sqlite",
     "push": "drizzle-kit push:sqlite"
@@ -25,6 +27,8 @@
     "@types/node": "^20.11.20",
     "drizzle-kit": "^0.20.14",
     "drizzle-zod": "^0.5.1",
-    "tsx": "^4.7.1"
+    "tsx": "^4.7.1",
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^1.3.1"
   }
 }
