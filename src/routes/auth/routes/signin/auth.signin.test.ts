@@ -1,27 +1,34 @@
+import { z } from "@hono/zod-openapi";
+import { AuthResponseSchema } from "../shared/schema";
 import { authSigninRoute } from "./auth.signin";
 
 const app = authSigninRoute;
+type SigninUserResponse = z.infer<typeof AuthResponseSchema>;
 
-describe("Example", () => {
+describe("Test Auth/signin route", () => {
   test("POST /auth/signin", async () => {
+    const mock_user = {
+      emailOrUsername: "boy1@email.com",
+      password: "password",
+    };
     const res = await app.request("/", {
       headers: {
         "content-type": "application/json",
       },
       method: "POST",
       body: JSON.stringify({
-        content: {
-          emailOrUsername: "boy1@email.com",
-          password: "password",
-        },
+        content: mock_user,
       }),
     });
 
-    console.log("=== res statsus tet ===", res.status);
-    // console.log("=== res ===", res);
-    // expect(res.status).toBe(200);
-    const response_data = await res.json();
-    console.log(" ==== res.json() ==== ",response_data);
+    expect(res.status).toBe(200);
+    const response_data = (await res.json()) as SigninUserResponse;
+    console.log(" ==== res.json() ==== ", response_data);
+    expect(mock_user.emailOrUsername).toMatchObject({
+      email: expect
+        .stringMatching(response_data.user.email)
+        .or(expect.stringMatching(response_data.user.username)),
+    });
     // expect(await res.json()).toBe("Many posts");
   });
 });
