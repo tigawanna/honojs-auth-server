@@ -32,13 +32,14 @@ const app = new OpenAPIHono({
     }
   },
 });
-app.openapi(authGetIndexRoute, async (c) => {
-const access_token = await createAccessToken(c, { id: "716cbe18-74d8-4f41-ba9a-dc5cd8b9b5de" });
-  return c.json({
-    message: "Hello Hono! auth route",
-    access_token,
-  });
-});
+
+// app.openapi(authGetIndexRoute, async (c) => {
+// const access_token = await createAccessToken(c, { id: "716cbe18-74d8-4f41-ba9a-dc5cd8b9b5de" });
+//   return c.json({
+//     message: "Hello Hono! auth route",
+//     access_token,
+//   });
+// });
 // 
 
 // signin user

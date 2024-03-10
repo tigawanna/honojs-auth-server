@@ -38,6 +38,7 @@ app.openapi(usersGetIndexRoute, async (c) => {
     );
   }
 });
+
 app.openapi(usersGetOneIndexRoute, async (c) => {
   try {
     const { id } = c.req.valid("param");
